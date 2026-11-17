@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Kuis Penilaian Pembelajaran Bahasa Indonesia SD</title>
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@600;800&display=swap">
+  <style>
+    :root {
+      --bg: #e9eff7;
+      --card: #fff;
+      --ink: #14294a;
+      --mute: #51627d;
+      --line: #c9d5e6;
+      --teal: #2a9d8f;
+      --tealbg: #d6f1ec;
+      --red: #d94b4b;
+      --redbg: #fbdcdc;
+      --orange: #f48c5a;
+      box-sizing: border-box;
+      padding-top: env(safe-area-inset-top, 0px);
+      padding-bottom: env(safe-area-inset-bottom, 0px)
+    }
+
+    @media (prefers-color-scheme:dark) {
+      :root:not([data-theme="light"]) {
+        --bg: #0f1f3a;
+        --card: #1a3257;
+        --ink: #f2f6fc;
+        --mute: #a9b9d3;
+        --line: #2f4a75;
+        --tealbg: #164c4c;
+        --redbg: #5a2a38
+      }
+    }
+
+    :root[data-theme="dark"] {
+      --bg: #0f1f3a;
+      --card: #1a3257;
+      --ink: #f2f6fc;
+      --mute: #a9b9d3;
+      --line: #2f4a75;
+      --tealbg: #164c4c;
+      --redbg: #5a2a38
+    }
+
+    * {
+      box-sizing: border-box
+    }
+
+    html {
+      height: 100%
+    }
+
+    body {
+      margin: 0;
+      min-height: 100%;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: Nunito, "Segoe UI", Arial, sans-serif;
+      font-weight: 600;
+      overflow-x: hidden
+    }
+
+    h1,
+    h2,
+    .q,
+    .big {
+      font-family: Fredoka, "Trebuchet MS", Arial, sans-serif
+    }
+
+    .wrap {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 24px 20px 40px;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center
+    }
+
+    .screen {
+      display: none
+    }
+
+    .screen.on {
+      display: block
+    }
+
+    button {
+      font: inherit;
+      cursor: pointer;
+      color: inherit
+    }
+
+    button:focus-visible {
+      outline: 4px solid var(--orange);
+      outline-offset: 3px
+    }
+
+    .card {
+      background: var(--card);
+      border: 2px solid var(--line);
+      border-radius: 22px;
+      padding: 28px
+    }
+
+    /* start */
+    #start {
+      text-align: center
+    }
+
+    #start h1 {
+      font-size: clamp(34px, 6vw, 60px);
+      line-height: 1.1;
+      margin: 0 0 12px
+    }
+
+    #start p {
+      font-size: clamp(18px, 2.4vw, 24px);
+      color: var(--mute);
+      margin: 0 auto 28px;
+      max-width: 34ch
+    }
+
+    .btn {
+      background: var(--orange);
+      color: #14294a;
+      border: 0;
+      border-radius: 16px;
+      padding: 16px 38px;
+      font-family: Fredoka, Arial, sans-serif;
+      font-weight: 700;
+      font-size: clamp(22px, 3vw, 30px);
+      box-shadow: 0 6px 0 #c4602f;
+      transition: transform .1s
+    }
+
+    .btn:active {
+      transform: translateY(5px);
+      box-shadow: 0 1px 0 #c4602f
+    }
+
+    /* game */
+    .top {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 18px;
+      font-size: clamp(16px, 2vw, 22px)
+    }
+
+    .bar {
+      flex: 1;
+      height: 14px;
+      background: var(--line);
+      border-radius: 9px;
+      overflow: hidden
+    }
+
+    .bar i {
+      display: block;
+      height: 100%;
+      width: 0;
+      background: var(--teal);
+      transition: width .4s
+    }
+
+    .pill {
+      background: var(--card);
+      border: 2px solid var(--line);
+      border-radius: 999px;
+      padding: 4px 16px;
+      white-space: nowrap
+    }
+
+    .q {
+      font-size: clamp(24px, 4vw, 40px);
+      line-height: 1.25;
+      margin: 0 0 24px;
+      font-weight: 600
+    }
+
+    .opts {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px
+    }
+
+    @media (max-width:640px) {
+      .opts {
+        grid-template-columns: 1fr
+      }
+    }
+
+    .opt {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      text-align: left;
+      background: var(--bg);
+      border: 3px solid var(--line);
+      border-radius: 16px;
+      padding: 16px 18px;
+      font-size: clamp(17px, 2.3vw, 24px);
+      font-weight: 800;
+      transition: transform .12s, border-color .12s
+    }
+
+    .opt:hover:not(:disabled) {
+      transform: translateY(-3px);
+      border-color: var(--orange)
+    }
+
+    .opt b {
+      flex: none;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--card);
+      border: 2px solid var(--line);
+      display: grid;
+      place-items: center;
+      font-family: Fredoka, Arial, sans-serif
+    }
+
+    .opt:disabled {
+      cursor: default
+    }
+
+    .opt.good {
+      background: var(--tealbg);
+      border-color: var(--teal);
+      animation: pop .5s
+    }
+
+    .opt.bad {
+      background: var(--redbg);
+      border-color: var(--red);
+      animation: shake .5s
+    }
+
+    .opt.dim {
+      opacity: .55
+    }
+
+    @keyframes pop {
+      0% {
+        transform: scale(1)
+      }
+
+      40% {
+        transform: scale(1.07)
+      }
+
+      100% {
+        transform: scale(1)
+      }
+    }
+
+    @keyframes shake {
+
+      0%,
+      100% {
+        transform: translateX(0)
+      }
+
+      15% {
+        transform: translateX(-14px)
+      }
+
+      35% {
+        transform: translateX(12px)
+      }
+
+      55% {
+        transform: translateX(-9px)
+      }
+
+      75% {
+        transform: translateX(6px)
+      }
+    }
+
+    .fb {
+      display: none;
+      margin-top: 20px;
+      align-items: center;
+      gap: 16px;
+      border-radius: 16px;
+      padding: 14px 18px;
+      font-size: clamp(16px, 2.1vw, 22px)
+    }
+
+    .fb.show {
+      display: flex
+    }
+
+    .fb.good {
+      background: var(--tealbg);
+      border: 2px solid var(--teal)
+    }
+
+    .fb.bad {
+      background: var(--redbg);
+      border: 2px solid var(--red)
+    }
+
+    .fb .ic {
+      flex: none;
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      color: #fff;
+      animation: icin .5s cubic-bezier(.3, 1.6, .5, 1)
+    }
+
+    .fb.good .ic {
+      background: var(--teal)
+    }
+
+    .fb.bad .ic {
+      background: var(--red)
+    }
+
+    @keyframes icin {
+      from {
+        transform: scale(0) rotate(-90deg)
+      }
+
+      to {
+        transform: scale(1) rotate(0)
+      }
+    }
+
+    .fb svg {
+      width: 32px;
+      height: 32px;
+      fill: none;
+      stroke: #fff;
+      stroke-width: 5;
+      stroke-linecap: round;
+      stroke-linejoin: round
+    }
+
+    .fb .tx {
+      flex: 1
+    }
+
+    .fb strong {
+      font-family: Fredoka, Arial, sans-serif;
+      font-size: 1.3em;
+      display: block
+    }
+
+    .next {
+      display: none;
+      margin: 20px 0 0 auto
+    }
+
+    .next.show {
+      display: block
+    }
+
+    .flash {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0;
+      z-index: 5
+    }
+
+    .flash.good {
+      background: radial-gradient(circle, transparent 40%, rgba(42, 157, 143, .45));
+      animation: fl .7s
+    }
+
+    .flash.bad {
+      background: radial-gradient(circle, transparent 35%, rgba(217, 75, 75, .55));
+      animation: fl .7s
+    }
+
+    @keyframes fl {
+      0% {
+        opacity: 0
+      }
+
+      25% {
+        opacity: 1
+      }
+
+      100% {
+        opacity: 0
+      }
+    }
+
+    .conf {
+      position: fixed;
+      z-index: 6;
+      pointer-events: none;
+      width: 12px;
+      height: 18px;
+      border-radius: 3px;
+      animation: fall 1.6s ease-out forwards
+    }
+
+    @keyframes fall {
+      to {
+        transform: translate(var(--x), var(--y)) rotate(var(--r));
+        opacity: 0
+      }
+    }
+
+    .shake {
+      animation: shake .5s
+    }
+
+    /* end */
+    #end {
+      text-align: center
+    }
+
+    #end h2 {
+      font-size: clamp(28px, 4.5vw, 46px);
+      margin: 0 0 6px
+    }
+
+    .big {
+      font-size: clamp(64px, 14vw, 130px);
+      font-weight: 700;
+      line-height: 1;
+      margin: 10px 0;
+      color: var(--teal)
+    }
+
+    #end p {
+      font-size: clamp(18px, 2.4vw, 26px);
+      color: var(--mute);
+      margin: 0 0 24px
+    }
+
+    @media (prefers-reduced-motion:reduce) {
+      * {
+        animation-duration: .01s !important;
+        transition: none !important
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="flash" id="flash"></div>
+  <div class="wrap" id="wrap">
+
+    <section class="screen on" id="start">
+      <h1>Kuis Penilaian Pembelajaran</h1>
+      <p>Penilaian proses dan hasil pembelajaran Bahasa Indonesia di SD</p>
+      <button class="btn" id="go">Mulai kuis</button>
+    </section>
+
+    <section class="screen" id="game">
+      <div class="top"><span class="pill" id="num">1/12</span>
+        <div class="bar"><i id="prog"></i></div><span class="pill" id="sc">Skor 0</span>
+      </div>
+      <div class="card" id="qcard">
+        <h2 class="q" id="q"></h2>
+        <div class="opts" id="opts"></div>
+        <div class="fb" id="fb">
+          <div class="ic" id="ic"></div>
+          <div class="tx"><strong id="ft"></strong><span id="fd"></span></div>
+        </div>
+        <button class="btn next" id="next">Lanjut</button>
+      </div>
+    </section>
+
+    <section class="screen" id="end">
+      <h2 id="etitle"></h2>
+      <div class="big" id="escore"></div>
+      <p id="emsg"></p>
+      <button class="btn" id="again">Main lagi</button>
+    </section>
+
+  </div>
+  <script>
+    var Q = [
+      {q: "Penilaian pembelajaran hasilnya digunakan untuk …", a: "Memperbaiki pembelajaran dan melaporkan kemajuan siswa", w: ["Memberi hukuman kepada siswa", "Hanya memberi angka", "Membandingkan guru satu dengan lainnya"], e: "Menilai bukan sekadar memberi angka."},
+      {q: "Penilaian proses dilakukan …", a: "Selama pembelajaran berlangsung", w: ["Hanya di akhir semester", "Setelah rapor dibagikan", "Sebelum guru mengajar"], e: "Penilaian proses bersifat formatif untuk memperbaiki belajar."},
+      {q: "Penilaian hasil bersifat …", a: "Sumatif", w: ["Diagnostik", "Formatif", "Observatif"], e: "Penilaian hasil bersifat sumatif untuk menyimpulkan capaian."},
+      {q: "Asesmen yang dilakukan di awal pembelajaran disebut …", a: "Diagnostik", w: ["Sumatif", "Formatif", "Remedial"], e: "Asesmen diagnostik mengetahui kemampuan awal, kebutuhan, dan latar belakang siswa."},
+      {q: "Mana yang termasuk contoh penilaian proses?", a: "Observasi", w: ["Tes tertulis akhir semester", "Ujian akhir tahun", "Proyek akhir"], e: "Contoh penilaian proses: observasi, tanya jawab, portofolio."},
+      {q: "Mana yang termasuk contoh penilaian hasil?", a: "Tes tertulis", w: ["Observasi", "Tanya jawab saat belajar", "Catatan anekdotal"], e: "Contoh penilaian hasil: tes tertulis, tes lisan, proyek akhir."},
+      {q: "Kumpulan karya tulis siswa untuk melihat perkembangan disebut …", a: "Portofolio", w: ["Rubrik", "Daftar cek", "Soal tes"], e: "Portofolio dipakai untuk melihat perkembangan siswa."},
+      {q: "Membaca nyaring, bercerita, dan presentasi termasuk teknik …", a: "Unjuk kerja", w: ["Portofolio", "Penilaian diri", "Tes pilihan ganda"], e: "Unjuk kerja menilai praktik langsung."},
+      {q: "Instrumen yang berisi kriteria dan tingkat capaian beserta skornya adalah …", a: "Rubrik", w: ["Daftar cek", "Catatan anekdotal", "Soal tes"], e: "Rubrik memuat kriteria, tingkat capaian, dan skor."},
+      {q: "Remedial diberikan kepada siswa yang …", a: "Belum tuntas", w: ["Sudah melampaui target", "Tidak masuk sekolah", "Paling aktif di kelas"], e: "Pengayaan untuk siswa yang sudah melampaui."},
+      {q: "Rumus nilai akhir pada contoh rubrik adalah …", a: "(jumlah skor ÷ skor maksimal) × 100", w: ["jumlah skor × 100", "skor maksimal ÷ jumlah skor", "jumlah skor + skor maksimal"], e: "Nilai akhir = (jumlah skor ÷ skor maksimal) × 100."},
+      {q: "Solusi saat jumlah siswa banyak dan waktu terbatas adalah …", a: "Gunakan rubrik dan daftar cek sederhana", w: ["Tidak perlu menilai", "Menilai hanya satu siswa", "Menunda sampai akhir tahun"], e: "Nilai siswa juga bisa secara bergilir."}
+    ];
+    var $ = function (i) {return document.getElementById(i)};
+    var cur = 0, score = 0, locked = false, order = [];
+    function show(id) {["start", "game", "end"].forEach(function (s) {$(s).classList.toggle("on", s === id)})}
+    function shuffle(a) {a = a.slice(); for (var i = a.length - 1; i > 0; i--) {var j = Math.floor(Math.random() * (i + 1)); var t = a[i]; a[i] = a[j]; a[j] = t} return a}
+    function beep(ok) {try {var c = new (window.AudioContext || window.webkitAudioContext)(), t = c.currentTime; (ok ? [523, 659, 784] : [220, 165]).forEach(function (f, i) {var o = c.createOscillator(), g = c.createGain(); o.type = ok ? "triangle" : "sawtooth"; o.frequency.value = f; g.gain.setValueAtTime(.15, t + i * .12); g.gain.exponentialRampToValueAtTime(.001, t + i * .12 + .2); o.connect(g); g.connect(c.destination); o.start(t + i * .12); o.stop(t + i * .12 + .22)})} catch (e) { } }
+    function confetti() {var cols = ["#f48c5a", "#2a9d8f", "#ffd166", "#4cc9f0", "#ef476f"]; for (var i = 0; i < 60; i++) {var d = document.createElement("div"); d.className = "conf"; d.style.left = "50%"; d.style.top = "45%"; d.style.background = cols[i % 5]; d.style.setProperty("--x", (Math.random() * 900 - 450) + "px"); d.style.setProperty("--y", (Math.random() * 600 - 250) + "px"); d.style.setProperty("--r", (Math.random() * 720 - 360) + "deg"); document.body.appendChild(d); setTimeout(function (e) {e.remove()}, 1700, d)} }
+    function flash(k) {var f = $("flash"); f.className = "flash"; void f.offsetWidth; f.className = "flash " + k}
+    function start() {cur = 0; score = 0; order = shuffle(Q); show("game"); load()}
+    function load() {
+      locked = false; var o = order[cur];
+      $("num").textContent = (cur + 1) + "/" + Q.length; $("prog").style.width = (cur / Q.length * 100) + "%"; $("sc").textContent = "Skor " + score;
+      $("q").textContent = o.q; $("fb").className = "fb"; $("next").className = "btn next";
+      var box = $("opts"); box.innerHTML = "";
+      shuffle([o.a].concat(o.w)).forEach(function (t, i) {
+        var b = document.createElement("button"); b.className = "opt"; b.dataset.t = t;
+        b.innerHTML = "<b>" + "ABCD"[i] + "</b><span></span>"; b.lastChild.textContent = t;
+        b.onclick = function () {pick(b)}; box.appendChild(b)
+      });
+    }
+    function pick(b) {
+      if (locked) return; locked = true; var o = order[cur], ok = b.dataset.t === o.a;
+      [].forEach.call($("opts").children, function (x) {x.disabled = true; if (x.dataset.t === o.a) x.classList.add("good"); else if (x === b) x.classList.add("bad"); else x.classList.add("dim")});
+      if (ok) score++;
+      $("sc").textContent = "Skor " + score;
+      var fb = $("fb"); fb.className = "fb show " + (ok ? "good" : "bad");
+      $("ic").innerHTML = ok ? '<svg viewBox="0 0 32 32"><path d="M6 17l7 7 13-14"/></svg>' : '<svg viewBox="0 0 32 32"><path d="M8 8l16 16M24 8L8 24"/></svg>';
+      $("ft").textContent = ok ? "Benar! Hebat!" : "Yah, belum tepat";
+      $("fd").textContent = ok ? o.e : "Jawaban benar: " + o.a + ". " + o.e;
+      flash(ok ? "good" : "bad"); beep(ok);
+      if (ok) confetti(); else {var c = $("qcard"); c.classList.remove("shake"); void c.offsetWidth; c.classList.add("shake")}
+      var n = $("next"); n.textContent = cur === Q.length - 1 ? "Lihat hasil" : "Lanjut"; n.className = "btn next show"; n.focus();
+    }
+    function nxt() {cur++; if (cur >= Q.length) finish(); else load()}
+    function finish() {
+      show("end"); var p = score / Q.length;
+      $("escore").textContent = score + "/" + Q.length;
+      $("etitle").textContent = p >= .9 ? "Luar biasa!" : p >= .7 ? "Bagus sekali!" : p >= .5 ? "Lumayan, ayo coba lagi!" : "Semangat, belajar lagi ya!";
+      $("emsg").textContent = "Nilai kamu " + Math.round(p * 100) + " dari 100.";
+      if (p >= .7) confetti();
+    }
+    $("go").onclick = start; $("again").onclick = start; $("next").onclick = nxt;
+    document.addEventListener("keydown", function (e) {
+      if (!$("game").classList.contains("on")) return;
+      var k = e.key.toLowerCase(), i = "1234".indexOf(k); if (i < 0) i = "abcd".indexOf(k);
+      if (i >= 0 && !locked && $("opts").children[i]) {pick($("opts").children[i])}
+      else if ((k === "enter" || k === " ") && locked) {e.preventDefault(); nxt()}
+    });
+  </script>
+</body>
+
+</html>
