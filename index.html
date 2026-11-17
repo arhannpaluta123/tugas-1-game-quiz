@@ -526,7 +526,7 @@
       $("sc").textContent = "Skor " + score;
       var fb = $("fb"); fb.className = "fb show " + (ok ? "good" : "bad");
       $("ic").innerHTML = ok ? '<svg viewBox="0 0 32 32"><path d="M6 17l7 7 13-14"/></svg>' : '<svg viewBox="0 0 32 32"><path d="M8 8l16 16M24 8L8 24"/></svg>';
-      $("ft").textContent = ok ? "Benar! Hebat!" : "Yah, belum tepat";
+      $("ft").textContent = ok ? "Benar! Hebat!" : "Yah, belum tepat makanya dengarin kakak cantik menjelaskan yah";
       $("fd").textContent = ok ? o.e : "Jawaban benar: " + o.a + ". " + o.e;
       flash(ok ? "good" : "bad"); beep(ok);
       if (ok) confetti(); else {var c = $("qcard"); c.classList.remove("shake"); void c.offsetWidth; c.classList.add("shake")}
